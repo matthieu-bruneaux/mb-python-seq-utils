@@ -4,6 +4,10 @@
 import sys
 
 
+if len(sys.argv) < 3:
+    print("> Enter input and output files as arguments.")
+    sys.exit(1)
+
 nameIn = sys.argv[1]
 nameOut = sys.argv[2]
 
