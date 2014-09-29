@@ -249,3 +249,19 @@ f.close()
 
 # dot toto.dot -Tpdf > toto.pdf
 
+# test for extracting parents
+#import random
+#n = 100000
+#l = list(a.GOdict.keys())
+#GOs = [random.choice(l) for x in xrange(n)]
+#cProfile.run('x = [a.getAncestors(x) for x in GOs]')
+#          21742265 function calls (14594844 primitive calls) in 18.963 seconds
+
+#    Ordered by: standard name
+
+#    ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+#         1    0.069    0.069   18.963   18.963 <string>:1(<module>)
+# 7247421/100000   16.322    0.000   18.895    0.000 GO_parser.py:148(getAncestors)
+#   7247421    1.813    0.000    1.813    0.000 GO_parser.py:70(__init__)
+#         1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+#   7247421    0.759    0.000    0.759    0.000 {method 'get' of 'dict' objects}

@@ -19,6 +19,11 @@ graph is performed. The resulting graph
 ([example](https://github.com/matthieu-bruneaux/python-bioinformatic-utils/raw/master/gene_ontology/toto.pdf))
 can be produced using **graphviz**.
 
+In terms of performances, a GO obo file with 41865 entries (**go.obo**) can be
+loaded in a list using *GOreader* in 1.46s on my computer. After building the
+tree, all ancestors can be retrieved for a random set of 100000 (1e5) GO ids in
+19s (linear run time).
+
 A repository which looks very interesting and with much more advanced code that
 this repository is [goatools](https://github.com/tanghaibao/goatools).
 
