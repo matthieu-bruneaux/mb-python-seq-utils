@@ -7,11 +7,11 @@ digraph G {
     label5 -> label4;
     label5 -> label6;
     label6 -> label3;
-    label3 [shape=box, label="carbon-oxygen lyase activity"];
-    label5 [shape=box, label="glycerol dehydratase activity"];
-    label1 [shape=box, label="catalytic activity"];
-    label6 [shape=box, label="hydro-lyase activity"];
-    label2 [shape=box, label="molecular_function"];
-    label0 [shape=box, label="lyase activity"];
-    label4 [shape=box, label="radical SAM enzyme activity"];
+    label2 [shape=box, label="GO:0003674\nmolecular_function"];
+    label5 [shape=box, label="GO:0046405\nglycerol dehydratase activity"];
+    label4 [shape=box, label="GO:0070283\nradical SAM enzyme activity"];
+    label6 [shape=box, label="GO:0016836\nhydro-lyase activity"];
+    label3 [shape=box, label="GO:0016835\ncarbon-oxygen lyase activity"];
+    label0 [shape=box, label="GO:0016829\nlyase activity"];
+    label1 [shape=box, label="GO:0003824\ncatalytic activity"];
 }

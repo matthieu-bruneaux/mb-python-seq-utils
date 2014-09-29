@@ -181,9 +181,14 @@ class GOtree :
     def graphvizGraph(self, graphOfGOid, names = False) :
         """Produce a graphiz input file from the output of 
         self.getAncestorsGraph
-        If names if True, replace GO ids by the corresponding names"""
+        If names if True, add the corresponding names"""
         if (names) :
-            graphOfGOid = self.showGOnamesGraph(graphOfGOid)
+            graphData = list()
+            graphOfGOidNames = self.showGOnamesGraph(graphOfGOid)
+            for (l1, l2) in zip(graphOfGOid, graphOfGOidNames) :
+                graphData.append((l1[0] + "\\n" + l2[0],
+                                  l1[1] + "\\n" + l2[1]))
+            graphOfGOid = graphData
         labels = dict()
         n_labels = 0
         for l in graphOfGOid :
