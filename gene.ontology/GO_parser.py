@@ -1,5 +1,12 @@
 # using also http://techoverflow.net/blog/2013/11/18/a-geneontology-obo-v1.2-parser-in-python/
 
+class GOparserError(Exception) :
+    """Modified from the tutorial.pdf file of the Python documentation"""
+    def __init__(self, value) :
+        self.value = value
+    def __str__(self) :
+        return(repr(self.value))
+    
 class GOreader :
     """GO obo file reader"""
 
@@ -54,12 +61,17 @@ class GOreader :
                 # not a new term
                 pass
 
-class GOparserError(Exception) :
-    """Modified from the tutorial.pdf file of the Python documentation"""
-    def __init__(self, value) :
-        self.value = value
-    def __str__(self) :
-        return(repr(self.value))
+class GOnode :
+    """GO tree node (GO term)"""
+
+    def __init__(self, GOid, GOparents, GOchildren) :
+        """Initialization.
+        GOid is a string.
+        GOparents and GOchildren are sets of strings.
+        """
+        self.GOid = GOid
+        self.GOparents = GOparents
+        self.GOchildren = GOchildren
 
 class GOtree :
     """GO tree"""
@@ -107,8 +119,32 @@ class GOtree :
 
     def buildTree(self) :
         """Build the graph (tree) of GO entries"""
-        pass
+        self.GOtree = dict()
+        for entry in self.GO :
+            GOid = entry["id"][0]
+            # get the previous record, if exists
+            currentNode = self.GOtree.get(GOid, GOnode(GOid, set([]), set([])))
+            # add the parents, if any
+            for parent in entry.get("is_a", []) :
+                parent = parent.split(" ! ", 1)[0]
+                currentNode.GOparents.add(parent)
+                # update the children sets of the parents
+                parentNode = self.GOtree.get(parent,
+                                             GOnode(parent, set([]), set([])))
+                parentNode.GOchildren.add(GOid)
+                self.GOtree[parent] = parentNode
+            self.GOtree[GOid] = currentNode
 
+    def getAncestors(self, GOid) :
+        """Get the list of ancestors from a GO node (GO term)"""
+        parents = list(self.GOtree.get(GOid, GOnode(set([]),
+                                                    set([]),
+                                                    set([]))).GOparents)
+        ancestors = parents + []
+        for p in parents :
+            ancestors += self.getAncestors(p)
+        return(ancestors)        
+            
 # test
 
 import cProfile
