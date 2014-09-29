@@ -194,10 +194,11 @@ class GOtree :
                     labels[ll] = "label" + str(n_labels)
                     n_labels += 1
         o = "digraph G {\n"
+        o += "    rankdir=BT\n"
         for l in graphOfGOid :
-            o += labels[l[0]] + " -> " + labels[l[1]] + ";\n"
+            o += "    " + labels[l[0]] + " -> " + labels[l[1]] + ";\n"
         for (k, v) in labels.items() :
-            o += v + " [shape=box, label=\"" + k + "\"];\n" 
+            o += "    " + v + " [shape=box, label=\"" + k + "\"];\n" 
         o += "}\n"
         return(o)            
         
@@ -232,4 +233,11 @@ def count(i) :
 #GO = [x for x in a]
 
 a = GOtree([x for x in GOreader("go.obo")])
+goid = "GO:0046405"
+g = a.graphvizGraph(a.getAncestorsGraph(goid), True)
+f = open("toto.dot", "w")
+f.write(g)
+f.close()
+
+# dot toto.dot -Tpdf > toto.pdf
 

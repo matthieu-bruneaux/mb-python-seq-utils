@@ -1,0 +1,17 @@
+digraph G {
+    rankdir=BT
+    label0 -> label1;
+    label1 -> label2;
+    label3 -> label0;
+    label4 -> label1;
+    label5 -> label4;
+    label5 -> label6;
+    label6 -> label3;
+    label3 [shape=box, label="carbon-oxygen lyase activity"];
+    label5 [shape=box, label="glycerol dehydratase activity"];
+    label1 [shape=box, label="catalytic activity"];
+    label6 [shape=box, label="hydro-lyase activity"];
+    label2 [shape=box, label="molecular_function"];
+    label0 [shape=box, label="lyase activity"];
+    label4 [shape=box, label="radical SAM enzyme activity"];
+}
