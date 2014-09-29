@@ -156,10 +156,50 @@ class GOtree :
         else :
             return(ancestors)
 
+    def getAncestorsGraph(self, GOid) :
+        """Get the list of graph edges from a GO node to its ancestors"""
+        parents = list(self.GOtree.get(GOid, GOnode(set([]),
+                                                    set([]),
+                                                    set([]))).GOparents)
+        edges = [(GOid, x) for x in parents]
+        for p in parents :
+            edges += self.getAncestorsGraph(p)
+        return(list(set(edges)))
+
     def showGOnames(self, listOfGOid) :
         """Get the names of GO terms"""
         dicts = [self.GOdict.get(x, dict(name = ["NA"])) for x in listOfGOid]
         return([x["name"][0] for x in dicts])
+
+    def showGOnamesGraph(self, graphOfGOid) :
+        """Get the names of GO terms in the output from 
+        self.getAncestorsGraph"""
+        o = [(self.GOdict[x[0]]["name"][0],
+              self.GOdict[x[1]]["name"][0]) for x in graphOfGOid]
+        return(o)
+
+    def graphvizGraph(self, graphOfGOid, names = False) :
+        """Produce a graphiz input file from the output of 
+        self.getAncestorsGraph
+        If names if True, replace GO ids by the corresponding names"""
+        if (names) :
+            graphOfGOid = self.showGOnamesGraph(graphOfGOid)
+        labels = dict()
+        n_labels = 0
+        for l in graphOfGOid :
+            for ll in l :
+                if (ll in labels.keys()) :
+                    pass
+                else :
+                    labels[ll] = "label" + str(n_labels)
+                    n_labels += 1
+        o = "digraph G {\n"
+        for l in graphOfGOid :
+            o += labels[l[0]] + " -> " + labels[l[1]] + ";\n"
+        for (k, v) in labels.items() :
+            o += v + " [shape=box, label=\"" + k + "\"];\n" 
+        o += "}\n"
+        return(o)            
         
 # test
 
