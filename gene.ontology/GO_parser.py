@@ -7,37 +7,52 @@ class GOreader :
         """Initialization"""
         self.filename = filename
         self.fileHandle = open(filename, mode = "r")
-        self.termFound = False
-        self.inTerm = False
+        self.newTerm = False
 
     def __iter__(self) :
         return(self)
 
     def next(self) :
         """Get the next GO term"""
-        while (not self.termFound) :
-            line = self.fileHandle.next().strip()
-            if (line == "[Term]") :
-                self.termFound = True
-        self.inTerm = True
-        term = dict()
-        line = self.fileHandle.next().strip()
-        if (line == "[Term]" or line == "[Typedef]") :
-            self.inTerm = False
-            if (line == "[Term]") :
-                self.inTerm = True
-        while (self.inTerm) :
-            if (line == "[Term]" or line == "[Typedef]") :
-                self.inTerm = False
-            elif (line != "") :    
-                (a, b) = line.split(": ", 1)
-                # add error if split doesn't work (length != 2)
-                term[a] = term.get(a, [])
-                term[a].append(b)
+        while (True) :
+            if (not self.newTerm) :
+                # read the next line if we are not already at the beginning
+                # of a new term
                 line = self.fileHandle.next().strip()
             else :
-                line = self.fileHandle.next().strip()
-        return(term)
+                # we know from previous calls that we are at the beginning
+                # of a new term
+                line = "[Term]"
+            if (line == "[Term]") :
+                # new term
+                self.newTerm = False
+                term = dict()
+                while (True) :
+                    try :
+                        content = self.fileHandle.next().strip()
+                        if (content != "[Term]" and content != "[Typedef]") :
+                            if (content != "") :
+                                # new entry
+                                (k, v) = content.split(": ", 1)
+                                term[k] = term.get(k, [])
+                                term[k].append(v)
+                            else :
+                                # empty entry
+                                pass
+                        elif (content == "[Term]") :
+                            # new term
+                            self.newTerm = True
+                            # end of term
+                            return(term)
+                        else :
+                            # simple end of term, next line is not a new term
+                            return(term)
+                    except StopIteration :
+                        # end of file while in a term
+                        return(term)
+            else :
+                # not a new term
+                pass
         
 a = GOreader("goslim_generic.obo")
 
