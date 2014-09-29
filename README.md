@@ -16,7 +16,7 @@ from a given GO id.
 
 GO tree is built based on the *is_a* fields, and no checking against cyclic
 graph is performed. The resulting graph
-([example](https://github.com/matthieu-bruneaux/python-bioinformatic-utils/raw/master/gene.ontology/toto.pdf))
+([example](https://github.com/matthieu-bruneaux/python-bioinformatic-utils/raw/master/gene_ontology/toto.pdf))
 can be produced using **graphviz**.
 
 A repository which looks very interesting and with much more advanced code that
