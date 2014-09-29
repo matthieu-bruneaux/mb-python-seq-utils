@@ -25,7 +25,7 @@ class GOreader :
             if (not self.newTerm) :
                 # read the next line if we are not already at the beginning
                 # of a new term
-                line = self.fileHandle.next().strip()
+                line = next(self.fileHandle).strip()
             else :
                 # we know from previous calls that we are at the beginning
                 # of a new term
@@ -36,7 +36,7 @@ class GOreader :
                 term = dict()
                 while (True) :
                     try :
-                        content = self.fileHandle.next().strip()
+                        content = next(self.fileHandle).strip()
                         if (content != "[Term]" and content != "[Typedef]") :
                             if (content != "") :
                                 # new entry
@@ -60,6 +60,9 @@ class GOreader :
             else :
                 # not a new term
                 pass
+
+    def __next__(self) :
+        return(self.next())
 
 class GOnode :
     """GO tree node (GO term)"""
