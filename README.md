@@ -14,7 +14,7 @@ file is **GO_parser.py**: for now there is a class implementing a simple GO obo
 file format reader and a GOtree class with methods to retrieve all ancestors
 from a given GO id.
 
-GO tree is built based on the /is_a/ fields, and so checking against cyclic
+GO tree is built based on the *is_a* fields, and no checking against cyclic
 graph is performed. The resulting graph
 ([example](https://github.com/matthieu-bruneaux/python-bioinformatic-utils/raw/master/gene.ontology/toto.pdf))
 can be produced using **graphviz**.
