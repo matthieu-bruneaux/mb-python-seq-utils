@@ -53,7 +53,26 @@ class GOreader :
             else :
                 # not a new term
                 pass
-        
-a = GOreader("goslim_generic.obo")
 
+# test
 
+import cProfile
+
+a = GOreader("go.obo")
+
+# cProfile.run('x = [x for x in a]')
+#       1989406 function calls in 1.461 seconds
+
+# Ordered by: standard name
+
+# ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+#      1    0.021    0.021    1.461    1.461 <string>:1(<module>)
+#      1    0.000    0.000    0.000    0.000 GO_parser.py:12(__iter__)
+#  41866    1.110    0.000    1.439    0.000 GO_parser.py:15(next)
+# 465926    0.050    0.000    0.050    0.000 {method 'append' of 'list' objects}
+#      1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+# 465926    0.056    0.000    0.056    0.000 {method 'get' of 'dict' objects}
+# 465926    0.151    0.000    0.151    0.000 {method 'split' of 'str' objects}
+# 549759    0.072    0.000    0.072    0.000 {method 'strip' of 'str' objects}
+
+GO = [x for x in a]
