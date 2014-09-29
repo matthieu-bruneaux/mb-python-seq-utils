@@ -84,6 +84,7 @@ class GOtree :
         self.GO = listOfGOterms
         self.checkNamespaces()
         self.checkUniquenessIds()
+        self.checkNames()
         self.makeGOdict()
         self.buildTree()
 
@@ -111,9 +112,15 @@ class GOtree :
         if (not len(ids) == len(self.GO)) :
             raise GOparserError("Not all entries have a unique ids")
 
+    def checkNames(self) :
+        """Check that each entry has exactly one name"""
+        l = set([len(x["name"]) for x in self.GO])
+        if (not l == set([1])) :
+            raise GOparserError("Not all entries have exactly one name")
+        
     def makeGOdict(self) :
         """Make a dictionary (GOid: GOterm) from the GO list"""
-        self.GOdict = dict(zip([x["id"][0] for x in GO], GO))
+        self.GOdict = dict(zip([x["id"][0] for x in self.GO], self.GO))
         if (not len(self.GOdict.keys()) == len(self.GO)) :
             raise GOparserError("Error while building the GO dictionary")
 
@@ -135,16 +142,25 @@ class GOtree :
                 self.GOtree[parent] = parentNode
             self.GOtree[GOid] = currentNode
 
-    def getAncestors(self, GOid) :
-        """Get the list of ancestors from a GO node (GO term)"""
+    def getAncestors(self, GOid, unique = False) :
+        """Get the list of ancestors from a GO node (GO term)
+        If unique is True, only returns unique ancestors."""
         parents = list(self.GOtree.get(GOid, GOnode(set([]),
                                                     set([]),
                                                     set([]))).GOparents)
         ancestors = parents + []
         for p in parents :
             ancestors += self.getAncestors(p)
-        return(ancestors)        
-            
+        if (unique) :
+            return(list(set(ancestors)))
+        else :
+            return(ancestors)
+
+    def showGOnames(self, listOfGOid) :
+        """Get the names of GO terms"""
+        dicts = [self.GOdict.get(x, dict(name = ["NA"])) for x in listOfGOid]
+        return([x["name"][0] for x in dicts])
+        
 # test
 
 import cProfile
@@ -156,7 +172,7 @@ def count(i) :
         o[x] += 1
     return(o)
 
-a = GOreader("go.obo")
+#a = GOreader("go.obo")
 
 # cProfile.run('x = [x for x in a]')
 #       1989406 function calls in 1.461 seconds
@@ -173,4 +189,7 @@ a = GOreader("go.obo")
 # 465926    0.151    0.000    0.151    0.000 {method 'split' of 'str' objects}
 # 549759    0.072    0.000    0.072    0.000 {method 'strip' of 'str' objects}
 
-GO = [x for x in a]
+#GO = [x for x in a]
+
+a = GOtree([x for x in GOreader("go.obo")])
+
