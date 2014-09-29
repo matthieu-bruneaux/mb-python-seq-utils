@@ -54,9 +54,71 @@ class GOreader :
                 # not a new term
                 pass
 
+class GOparserError(Exception) :
+    """Modified from the tutorial.pdf file of the Python documentation"""
+    def __init__(self, value) :
+        self.value = value
+    def __str__(self) :
+        return(repr(self.value))
+
+class GOtree :
+    """GO tree"""
+
+    def __init__(self, listOfGOterms) :
+        """Initialization
+        listOfGOterms is something like:
+        x = [x for x in GOreader("go.obo")]
+        """
+        self.GO = listOfGOterms
+        self.checkNamespaces()
+        self.checkUniquenessIds()
+        self.makeGOdict()
+        self.buildTree()
+
+    def checkNamespaces(self) :
+        """Check that each entry has only one namespace among the three allowed
+        namespaces"""
+        nsp = [x["namespace"] for x in self.GO]
+        lnsp = [len(x) for x in nsp]
+        lnsp = set(lnsp)
+        if (not lnsp == set([1])) :
+            raise GOparserError("GO term namespace error (len!=1)")
+        nsp = [x[0] for x in nsp]
+        nsp = set(nsp)
+        if (not nsp == set(["cellular_component", "biological_process",
+                            "molecular_function"])) :
+            raise GOparserError(("Improper GO term namespaces: " +
+                                 repr(list(nsp))))
+
+    def checkUniquenessIds(self) :
+        """Check that each entry has a unique id"""
+        l = set([len(x["id"]) for x in self.GO])
+        if (not l == set([1])) :
+            raise GOparserError("Not all entries have exactly one id")
+        ids = set([x["id"][0] for x in self.GO])
+        if (not len(ids) == len(self.GO)) :
+            raise GOparserError("Not all entries have a unique ids")
+
+    def makeGOdict(self) :
+        """Make a dictionary (GOid: GOterm) from the GO list"""
+        self.GOdict = dict(zip([x["id"][0] for x in GO], GO))
+        if (not len(self.GOdict.keys()) == len(self.GO)) :
+            raise GOparserError("Error while building the GO dictionary")
+
+    def buildTree(self) :
+        """Build the graph (tree) of GO entries"""
+        pass
+
 # test
 
 import cProfile
+
+def count(i) :
+    o = dict()
+    for x in i :
+        o[x] = o.get(x, 0)
+        o[x] += 1
+    return(o)
 
 a = GOreader("go.obo")
 
