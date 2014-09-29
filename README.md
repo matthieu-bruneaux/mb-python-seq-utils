@@ -9,7 +9,7 @@ If you use those scripts and find any error, please report it!
 Gene Ontology tools
 -------------------
 
-Those tools are located in the **gene.ontology** folder. The most interesting
+Those tools are located in the **gene_ontology** folder. The most interesting
 file is **GO_parser.py**: for now there is a class implementing a simple GO obo
 file format reader and a GOtree class with methods to retrieve all ancestors
 from a given GO id.
