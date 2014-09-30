@@ -145,29 +145,49 @@ class GOtree :
                 self.GOtree[parent] = parentNode
             self.GOtree[GOid] = currentNode
 
-    def getAncestors(self, GOid, unique = False) :
+    def getAncestors(self, GOid, unique = False, depth = -1) :
         """Get the list of ancestors from a GO node (GO term)
-        If unique is True, only returns unique ancestors."""
+        If unique is True, only returns unique ancestors.
+        If depth = 0, doesn't return anything.
+        If depth = n > 0, go as deep in the descendants (n recursive calls).
+        If depth < 0, go all the way to the terminal leaves."""
+        if (depth == 0) :
+            return([])
+        depth = depth - 1
         parents = list(self.GOtree.get(GOid, GOnode(set([]),
                                                     set([]),
                                                     set([]))).GOparents)
         ancestors = parents + []
         for p in parents :
-            ancestors += self.getAncestors(p)
+            ancestors += self.getAncestors(p, unique, depth)
         if (unique) :
             return(list(set(ancestors)))
         else :
             return(ancestors)
 
-    def getAncestorsGraph(self, GOid) :
-        """Get the list of graph edges from a GO node to its ancestors"""
+    def getAncestorsGraph(self, GOid, depth = -1) :
+        """Get the list of graph edges from a GO node to its ancestors
+        If depth = 0, doesn't return anything.
+        If depth = n > 0, go as deep in the descendants (n recursive calls).
+        If depth < 0, go all the way to the terminal leaves."""
+        if (depth == 0) :
+            return([])
+        depth = depth - 1
         parents = list(self.GOtree.get(GOid, GOnode(set([]),
                                                     set([]),
                                                     set([]))).GOparents)
         edges = [(GOid, x) for x in parents]
         for p in parents :
-            edges += self.getAncestorsGraph(p)
+            edges += self.getAncestorsGraph(p, depth)
         return(list(set(edges)))
+
+    def getGenealogyGraph(self, GOid, depthDescendants = -1, depthAncestors = -1) :
+        """Get the graph of both descendants and ancestors of a GO node.
+        Depth can be set for descendants and ancestors.
+        A negative depth means to go all the way to the terminal nodes."""
+        g = self.getDescendantsGraph(GOid, depthDescendants)
+        g += self.getAncestorsGraph(GOid, depthAncestors)
+        return(g)
 
     def showGOnames(self, listOfGOid) :
         """Get the names of GO terms"""
@@ -245,6 +265,24 @@ class GOtree :
         for c in children :
             edges += self.getDescendantsGraph(c, depth)
         return(list(set(edges)))
+
+    def showGraph(self, graph) :
+        """Display a graph. Relies on dot and the Image module on Linux.
+        Not tested on Windows."""
+        import uuid
+        temp = str(uuid.uuid4())
+        f = open(temp + ".dot", "w")
+        f.write(self.graphvizGraph(graph, True))
+        f.close()
+        import subprocess
+        c = ["dot", "-Tpng", temp + ".dot", "-o", temp + ".png"]
+        p = subprocess.Popen(c)
+        p.wait()
+        import Image
+        Image.open(temp + ".png").show()
+        import os
+        os.remove(temp + ".dot")
+        os.remove(temp + ".png")
 
 class GOroot :
     """A simple class to hold the roots of the tree"""
