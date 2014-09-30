@@ -209,7 +209,51 @@ class GOtree :
             o += "    " + v + " [shape=box, label=\"" + k + "\"];\n" 
         o += "}\n"
         return(o)            
-        
+
+    def getDescendants(self, GOid, unique = False, depth = -1) :
+        """Get the list of descendants from a GO node (GO term)
+        If unique is True, only returns unique decendants.
+        If depth = 0, doesn't return anything.
+        If depth = n > 0, go as deep in the descendants (n recursive calls).
+        If depth < 0, go all the way to the terminal leaves."""
+        if (depth == 0) :
+            return([])
+        depth = depth - 1
+        children = list(self.GOtree.get(GOid, GOnode(set([]),
+                                                    set([]),
+                                                     set([]))).GOchildren)
+        descendants = children + []
+        for c in children :
+            descendants += self.getDescendants(c, unique, depth)
+        if (unique) :
+            return(list(set(descendants)))
+        else :
+            return(descendants)
+
+    def getDescendantsGraph(self, GOid, depth = -1) :
+        """Get the list of graph edges from a GO node to its descendants
+        If depth = 0, doesn't return anything.
+        If depth = n > 0, go as deep in the descendants (n recursive calls).
+        If depth < 0, go all the way to the terminal leaves."""
+        if (depth == 0) :
+            return([])
+        children = list(self.GOtree.get(GOid, GOnode(set([]),
+                                                    set([]),
+                                                        set([]))).GOchildren)
+        depth = depth - 1
+        edges = [(x, GOid) for x in children]
+        for c in children :
+            edges += self.getDescendantsGraph(c, depth)
+        return(list(set(edges)))
+
+class GOroot :
+    """A simple class to hold the roots of the tree"""
+
+    def __init__(self) :
+        self.BP = ["GO:0008150", "GO:0007582", "GO:0000004"]
+        self.CC = ["GO:0005575", "GO:0008372"]
+        self.MF = ["GO:0003674", "GO:0005554"]
+
 # test
 
 import cProfile
