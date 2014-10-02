@@ -90,7 +90,8 @@ class GOtree :
         self.checkNames()
         self.makeGOdict()
         self.buildTree()
-
+        self.buildAltIdDict()
+        
     def checkNamespaces(self) :
         """Check that each entry has only one namespace among the three allowed
         namespaces"""
@@ -144,6 +145,20 @@ class GOtree :
                 parentNode.GOchildren.add(GOid)
                 self.GOtree[parent] = parentNode
             self.GOtree[GOid] = currentNode
+
+    def buildAltIdDict(self) :
+        """Build a dictionary (alt_id, real_id). All alt_ids are stored there,
+        but for convenience the real_ids are also there as (real_id, real_id).
+        This means that sending any id to the dictionary will return the 
+        corresponding real id, even if the query itself was a real id."""
+        altIdDict = dict()
+        for GOid in self.GO :
+            real_id = GOid["id"][0]
+            alt_id = [real_id] + GOid.get("alt_id", [])
+            for each in alt_id :
+                assert altIdDict.get(each, "not_recorded") == "not_recorded"
+                altIdDict[each] = real_id
+        self.altIdDict = altIdDict
 
     def getAncestors(self, GOid, unique = False, depth = -1) :
         """Get the list of ancestors from a GO node (GO term)
