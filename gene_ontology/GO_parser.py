@@ -1,12 +1,15 @@
 # using also http://techoverflow.net/blog/2013/11/18/a-geneontology-obo-v1.2-parser-in-python/
 
+
+### * class GOparserError(Exception)
 class GOparserError(Exception) :
     """Modified from the tutorial.pdf file of the Python documentation"""
     def __init__(self, value) :
         self.value = value
     def __str__(self) :
         return(repr(self.value))
-    
+
+### * class GOreader
 class GOreader :
     """GO obo file reader"""
 
@@ -64,6 +67,7 @@ class GOreader :
     def __next__(self) :
         return(self.next())
 
+### * class GOnode
 class GOnode :
     """GO tree node (GO term)"""
 
@@ -76,6 +80,7 @@ class GOnode :
         self.GOparents = GOparents
         self.GOchildren = GOchildren
 
+### * class GOtree
 class GOtree :
     """GO tree"""
 
@@ -299,6 +304,7 @@ class GOtree :
         os.remove(temp + ".dot")
         os.remove(temp + ".png")
 
+### * class GOroot
 class GOroot :
     """A simple class to hold the roots of the tree"""
 
