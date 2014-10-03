@@ -1,7 +1,7 @@
 #+TITLE: Python bioinformatic utilities
 #+AUTHOR: Matthieu Bruneaux
 #+STARTUP: content
-#+OPTIONS: toc:2
+#+OPTIONS: toc:3
 
 A set of various short scripts written in Python and used for sequence 
 manipulation, gene ontology manipulation and such.
