@@ -1,14 +1,7 @@
-#+TITLE: Python bioinformatic utilities
+#+TITLE: Gene Ontology tools
 #+AUTHOR: Matthieu Bruneaux
 #+STARTUP: content
 #+OPTIONS: toc:3
-
-A set of various short scripts written in Python and used for sequence 
-manipulation, gene ontology manipulation and such.
-
-If you use those scripts and find any error, please report it!
-
-** Gene Ontology tools
 
 Those tools are located in the *gene_ontology* folder. The most interesting
 file is *GO_parser.py*: for now there is a class implementing a simple GO obo
@@ -27,7 +20,7 @@ tree, all ancestors can be retrieved for a random set of 100000 (1e5) GO ids in
 A repository which looks very interesting and with much more advanced code that
 this repository is [[https://github.com/tanghaibao/goatools][goatools]].
 
-*** Classes defined in *GO_parser.py*
+** Classes defined in *GO_parser.py*
 
 - =GOparserError= :: error raised when a problem occurred in the parsing of the
      GO data
@@ -41,7 +34,7 @@ this repository is [[https://github.com/tanghaibao/goatools][goatools]].
               comprehension.
 - =GOroot= :: a simple class to hold the root ids of the tree
 
-*** *GOtree* attributes of interest
+** *GOtree* attributes of interest
 
 - =GO= :: the original GO term list used to build the tree
 - =GOdict= :: a dictionary mapping each GO =id= to the full description of the
@@ -52,7 +45,7 @@ this repository is [[https://github.com/tanghaibao/goatools][goatools]].
                  file, this dictionary can be used to convert any id value to
                  the currently accepted =id= for the GO term
 
-*** *GOtree* methods of interest
+** *GOtree* methods of interest
 
 - =getAncestors(GOid, unique = FALSE, depth = -1)= :: return a list of the GO
      ids of the ancestors of =GOid=
@@ -61,13 +54,9 @@ this repository is [[https://github.com/tanghaibao/goatools][goatools]].
 - =showGOnames(listOfGOid)= :: return a list of GO term names corresponding to
      the GO ids given as input
 
-*** TO DO
+** TO DO
 
-**** TODO Add some example scripts
+*** TODO Add some example scripts
 
-**** TODO Generate a proper documentation
+*** TODO Generate a proper documentation
 
-** Fasta sequence file tools
-
-Those tools are in the *sequences* folder. Each script performs a very simple
-task.
