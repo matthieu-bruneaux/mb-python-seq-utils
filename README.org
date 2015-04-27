@@ -14,20 +14,20 @@ See the [[https://github.com/matthieu-bruneaux/python-bioinformatic-utils/tree/m
 
 ** Fasta CLI tools (=fasta-cli-tools=)
 
-*** =uniq-fasta.py=
+- =uniq-fasta.py=
 
-Script to report unique fasta sequences from one or several fasta
-files. Sequences are reported in the fasta format, using a hash of the sequence
-as the sequence name.
+  Script to report unique fasta sequences from one or several fasta
+  files. Sequences are reported in the fasta format, using a hash of the sequence
+  as the sequence name.
 
-Example usage:
-#+BEGIN_SRC bash
-# For one input file
-python uniq-fasta.py mySeq.fasta -o myUniqSeq.fasta
-cat mySeq.fasta | python uniq-fasta.py > myUniqSeq.fasta
-# For several input file
-cat *.fasta | python uniq-fasta.py > myUniqSeq.fasta
-#+END_SRC
+  Example usage:
+  #+BEGIN_SRC bash
+  # For one input file
+  python uniq-fasta.py mySeq.fasta -o myUniqSeq.fasta
+  cat mySeq.fasta | python uniq-fasta.py > myUniqSeq.fasta
+  # For several input files
+  cat *.fasta | python uniq-fasta.py > myUniqSeq.fasta
+  #+END_SRC
 
 ** Fasta sequence file tools
 
