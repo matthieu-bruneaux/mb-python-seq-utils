@@ -3,7 +3,7 @@
 #+STARTUP: content
 #+OPTIONS: toc:3
 
-A set of various short scripts written in Python and used for sequence 
+A set of various short scripts written in Python and used for sequence
 manipulation, gene ontology manipulation and such.
 
 If you use those scripts and find any error, please report it!
@@ -11,6 +11,23 @@ If you use those scripts and find any error, please report it!
 ** Gene Ontology tools
 
 See the [[https://github.com/matthieu-bruneaux/python-bioinformatic-utils/tree/master/gene_ontology][README]] file in the *gene_ontology* folder.
+
+** Fasta CLI tools (=fasta-cli-tools=)
+
+*** =uniq-fasta.py=
+
+Script to report unique fasta sequences from one or several fasta
+files. Sequences are reported in the fasta format, using a hash of the sequence
+as the sequence name.
+
+Example usage:
+#+BEGIN_SRC bash
+# For one input file
+python uniq-fasta.py mySeq.fasta -o myUniqSeq.fasta
+cat mySeq.fasta | python uniq-fasta.py > myUniqSeq.fasta
+# For several input file
+cat *.fasta | python uniq-fasta.py > myUniqSeq.fasta
+#+END_SRC
 
 ** Fasta sequence file tools
 
